@@ -129,3 +129,92 @@ end
 def diameter
   wheel.diameter
 end
+
+# 引数の順番への依存を取り除く
+class Gear
+  attr_reader :chainring, :cog, :wheel
+  def initialize(chainring, cog, wheel)
+    @chainring = chainring
+    @cog       = cog
+    @wheel     = wheel
+  end
+  ...
+end
+
+Gear.new(
+  52,
+  11,
+  Wheel.new(26, 1.5)).gear_inches
+
+# 初期化の際の引数にハッシュを使う
+class Gear
+  attr_reader :chainring, :cog, :wheel
+  def initialize(args)
+    @chainring = args[:chainring]
+    @cog       = args[:cog]
+    @wheel     = args[:wheel]
+  end
+  ...
+end
+
+Gear.new(
+  :chainring => 52,
+  :cog       => 11,
+  :wheel     => Wheel.new(26, 1.5)).gear_inches
+
+# 明示的にデフォルト値を設定する-1
+# || を使って、デフォルト値を指定している
+def initialize(args)
+  @chainring = args[:chainring] || 40
+  @cog       = args[:cog]       || 18
+  @wheel     = args[:wheel]
+end
+
+# 明示的にデフォルト値を設定する-2
+# fetchを使ってデフォルト値を指定している
+def initialize(args)
+  @chainring = args.fetch(:chainring, 40)
+  @cog       = args.fetch(:cog, 18)
+  @wheel     = args[:wheel]
+end
+
+# 明示的にデフォルト値を設定する-3
+# デフォルト値のハッシュをマージすることでデフォルト値を指定している
+def initialize(args)
+  args = defaults.merge(args)
+  @chainring = args[:chainring]
+#   ...
+end
+
+def defaults
+  {:chainring => 40, :cog => 18}
+end
+
+# 複数のパラメーターを用いた初期化を隔離する
+# Gearが外部インターフェースの一部の場合
+module SomeFramework
+  class Gear
+    attr_reader :chainring, :cog, :wheel
+    def initialize(chainring, cog, wheel)
+      @chainring = chainring
+      @cog       = cog
+      @wheel     = wheel
+    end
+  # ...
+  end
+end
+
+# 外部のインターフェースをラップし、自身を変更から守る
+module GearWrapper
+  def self.gear(args)
+    SomeFramework::Gear.new(args[:chainring],
+                            args[:cog],
+                            args[:wheel])
+  end
+end
+
+# 引数を持つハッシュを渡すことでGearのインスタンスを作成できるようになった
+GearWrapper.gear(
+  :chainring => 52,
+  :cog       => 11,
+  :wheel     => Wheel.new(26, 1.5)).gear_inches
