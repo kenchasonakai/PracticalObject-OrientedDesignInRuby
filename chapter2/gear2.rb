@@ -7,12 +7,12 @@ class Gear
     @tire      = tire
   end
 
+  # ギア比を計算するメソッド
   def ratio
     chainring / cog.to_f
   end
 
   def gear_inches
-    # tire goes around rim twice for diameter
     ratio * (rim + (tire * 2))
   end
 end
