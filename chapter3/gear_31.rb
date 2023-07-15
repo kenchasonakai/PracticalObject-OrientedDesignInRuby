@@ -107,3 +107,25 @@ class Gear
   end
   # ...
 end
+
+# 脆い外部メッセージを隔離する-1
+def gear_inches
+  ratio * wheel.diameter
+end
+
+def gear_inches
+  #... 恐ろしい計算が何行かある
+  foo = some_intermediate_result * wheel.diameter
+  #... 恐ろしい計算がさらに何行かある
+end
+
+# 脆い外部メッセージを隔離する-2
+def gear_inches
+  #... 恐ろしい計算が何行かある
+  foo = some_intermediate_result * diameter
+  #... 恐ろしい計算がさらに何行かある
+end
+
+def diameter
+  wheel.diameter
+end
