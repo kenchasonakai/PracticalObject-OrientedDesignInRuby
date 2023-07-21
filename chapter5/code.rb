@@ -146,8 +146,7 @@ end
 # 同じ引数をすべて渡せる
 def first(*args)
   if args.any?
-    if args.first.kind_of?(Integer) ||
-         (loaded?&& !args.first.kind_of?(Hash))
+    if args.first.kind_of?(Integer) || (loaded?&& !args.first.kind_of?(Hash))
       to_a.first(*args)
     else
       apply_finder_options(args.first).first
