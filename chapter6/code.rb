@@ -94,3 +94,19 @@ mountain_bike.spares
 #     :tape_color  => nil,        <- 不適切
 #     :front_shock => 'Manitou',
 #     :rear_shock  => "Fox"}
+
+# 抽象的なスーパークラスを作る
+class Bicycle
+  # このクラスはもはや空となった。
+  # コードはすべて RoadBike に移された。
+end
+
+class RoadBike < Bicycle
+  # いまは Bicycle のサブクラス。
+  # かつての Bicycle クラスからのコードをすべて含む。
+end
+
+class MountainBike < Bicycle
+  # Bicycle のサブクラスのまま（Bicycle は現在空になっている）。
+  # コードは何も変更されていない。
+end
