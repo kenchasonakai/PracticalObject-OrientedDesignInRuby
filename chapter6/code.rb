@@ -110,3 +110,17 @@ class MountainBike < Bicycle
   # Bicycle のサブクラスのまま（Bicycle は現在空になっている）。
   # コードは何も変更されていない。
 end
+
+road_bike = RoadBike.new(
+              size:       'M',
+              tape_color: 'red' )
+
+road_bike.size  # => "M"
+
+mountain_bike = MountainBike.new(
+                  size:         'S',
+                  front_shock:  'Manitou',
+                  rear_shock:   'Fox')
+
+mountain_bike.size
+# NoMethodError: undefined method 'size'
