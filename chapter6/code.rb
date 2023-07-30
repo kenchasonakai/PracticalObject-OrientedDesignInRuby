@@ -104,6 +104,29 @@ end
 class RoadBike < Bicycle
   # いまは Bicycle のサブクラス。
   # かつての Bicycle クラスからのコードをすべて含む。
+
+  # attr_reader :style, :size, :tape_color,
+  #             :front_shock, :rear_shock
+
+  # def initialize(args)
+  #   @style        = args[:style]
+  #   @size        = args[:size]
+  #   @tape_color  = args[:tape_color]
+  #   @front_shock = args[:front_shock]
+  #   @rear_shock  = args[:rear_shock]
+  # end
+
+  # def spares
+  #   if style == :road
+  #     { chain:        '10-speed',
+  #       tire_size:    '23',       # milimeters
+  #       tape_color:   tape_color }
+  #   else
+  #     { chain:        '10-speed',
+  #       tire_size:    '2.1',      # inches
+  #       rear_shock:   rear_shock }
+  #   end
+  # end
 end
 
 class MountainBike < Bicycle
@@ -156,3 +179,36 @@ mountain_bike = MountainBike.new(
                   rear_shock:   'Fox')
 
 mountain_bike.size # -> 'S'
+
+# 具象から抽象を分ける
+class RoadBike < Bicycle
+  # ...
+  def spares
+    { chain:        '10-speed',
+      tire_size:    '23',
+      tape_color:   tape_color}
+  end
+end
+
+class MountainBike < Bicycle
+  # ...
+  def spares
+    super.merge({rear_shock:  rear_shock})
+  end
+end
+
+mountain_bike.spares
+# NoMethodError: super: no superclass method 'spares'
+
+class Bicycle
+  attr_reader :size, :chain, :tire_size
+
+  def initialize(args={})
+    @size       = args[:size]
+    @chain      = args[:chain]
+    @tire_size  = args[:tire_size]
+  end
+  # ...  .
+end
+
+# テンプレートメソッドパターンを使う
