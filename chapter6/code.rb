@@ -65,3 +65,18 @@ bike.spares
 # -> {:tire_size   => "2.1",
 #     :chain       => "10-speed",
 #     :rear_shock  => 'Fox'}
+
+# 継承を不適切に適応する
+class MountainBike < Bicycle
+  attr_reader :front_shock, :rear_shock
+
+  def initialize(args)
+    @front_shock = args[:front_shock]
+    @rear_shock  = args[:rear_shock]
+    super(args)
+  end
+
+  def spares
+    super.merge(rear_shock: rear_shock)
+  end
+end
