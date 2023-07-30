@@ -124,3 +124,35 @@ mountain_bike = MountainBike.new(
 
 mountain_bike.size
 # NoMethodError: undefined method 'size'
+
+# 抽象的な振る舞いを昇格する
+class Bicycle
+  attr_reader :size     # <- RoadBikeから昇格した
+
+  def initialize(args={})
+    @size = args[:size] # <- RoadBikeから昇格した
+  end
+end
+
+class RoadBike < Bicycle
+  attr_reader :tape_color
+
+  def initialize(args)
+    @tape_color = args[:tape_color]
+    super(args)  # <- RoadBikeは'super'を必ず呼ばなければならなくなった
+  end
+  # ...
+end
+
+road_bike = RoadBike.new(
+              size:       'M',
+              tape_color: 'red' )
+
+road_bike.size  # -> ""M""
+
+mountain_bike = MountainBike.new(
+                  size:         'S',
+                  front_shock:  'Manitou',
+                  rear_shock:   'Fox')
+
+mountain_bike.size # -> 'S'
