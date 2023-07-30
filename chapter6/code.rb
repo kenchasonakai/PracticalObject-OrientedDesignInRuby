@@ -266,3 +266,37 @@ mountain_bike = MountainBike.new(
 
 mountain_bike.tire_size # => '2.1'
 road_bike.chain         # => "10-speed"
+
+# 全てのテンプレートメソッドを実装する
+class RecumbentBike < Bicycle
+  def default_chain
+    '9-speed'
+  end
+end
+
+bent = RecumbentBike.new
+# NameError: undefined local variable or method
+#   'default_tire_size'
+
+class Bicycle
+  #...
+  def default_tire_size
+    raise NotImplementedError
+  end
+end
+
+bent = RecumbentBike.new
+#  NotImplementedError: NotImplementedError
+
+class Bicycle
+  #...
+  def default_tire_size
+    raise NotImplementedError,
+          "This #{self.class} cannot respond to:"
+  end
+end
+
+bent = RecumbentBike.new
+#  NotImplementedError:
+#    This RecumbentBike cannot respond to:
+#             'default_tire_size'
